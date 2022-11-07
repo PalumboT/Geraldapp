@@ -1,0 +1,648 @@
+openapi: 3.0.3
+info:
+  title: Swagger - OpenAPI 3.0
+  description: Contacts endpoints
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+servers:
+  - url: https://petstore3.swagger.io/api/v3
+tags:
+  - name: contact
+    description: Everything about the contacts
+  - name: contact-skill
+    description: Everything about the contact's skills
+  - name: skill
+    description: Everything about the skills
+paths:
+  /skill:
+    get:
+      tags:
+        - skill
+      summary: Get all skills
+      description: Returns all skills
+      operationId: getAllSkills
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkillsResponse"
+        400:
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkillsResponse"
+        405:
+          description: "Invalid input"
+        401:
+          description: "Unauthorized request"
+        403:
+          description: "Forbidden request"
+      security:
+        - contacts_auth:
+            - read:skills
+            
+  /contact-skill/getByContactId:
+    get:
+      tags:
+        - contact-skill
+      summary: Get all skills of a contact by Id
+      description: Returns all skills of a contact
+      operationId: getContactSkillsByContactId
+      parameters:
+        - name: contactId
+          in: query
+          description: ID of contact
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactSkillsResponse"
+        400:
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactSkillsResponse"
+        405:
+          description: "Invalid input"
+        401:
+          description: "Unauthorized request"
+        403:
+          description: "Forbidden request"
+      security:
+        - contacts_auth:
+            - read:contact-skills
+            
+  /contact-skill:
+    post:
+      tags:
+        - contact-skill
+      summary: Add a new contact skill
+      description: Add a new contact skill
+      operationId: addContactSkill
+      requestBody:
+        description: Create a new contact skill
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateContactSkillRequest'
+        required: true
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactSkillResponse"
+        400:
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactSkillResponse"
+        405:
+          description: "Invalid input"
+        401:
+          description: "Unauthorized request"
+        403:
+          description: "Forbidden request"
+      security:
+        - contacts_auth:
+            - write:contact-skills
+            - read:contact-skills
+  
+  /contact-skill/{id}:
+    get:
+      tags:
+        - contact-skill
+      summary: Find contact skill by ID
+      description: Returns a single contact skill
+      operationId: getContactSkillById
+      parameters:
+        - name: id
+          in: path
+          description: ID of contact skill to return
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactSkillResponse"
+        400:
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactSkillResponse"
+        405:
+          description: "Invalid input"
+        401:
+          description: "Unauthorized request"
+        403:
+          description: "Forbidden request"
+      security:
+        - contacts_auth:
+            - read:contact-skills
+            
+    put:
+      tags:
+        - contact-skill
+      summary: Update an existing contact skill
+      description: Update an existing contact skill by Id
+      operationId: updateContactSkill
+      parameters:
+        - name: id
+          in: path
+          description: Contact skill id to update
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      requestBody:
+        description: Update an existent contact skill
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateContactSkillRequest'
+        required: true
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactSkillResponse"
+        400:
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactSkillResponse"
+        405:
+          description: "Invalid input"
+        401:
+          description: "Unauthorized request"
+        403:
+          description: "Forbidden request"
+      security:
+        - contacts_auth:
+            - write:contact-skills
+            - read:contact-skills
+            
+    delete:
+      tags:
+        - contact-skill
+      summary: Deletes a contact skill
+      description: delete a contact skill
+      operationId: deleteContactSkill
+      parameters:
+        - name: id
+          in: path
+          description: Contact skill id to delete
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        400:
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        405:
+          description: "Invalid input"
+        401:
+          description: "Unauthorized request"
+        403:
+          description: "Forbidden request"
+      security:
+        - contacts_auth:
+            - write:contact-skills
+            - read:contact-skills
+            
+  /contact/{id}:
+    get:
+      tags:
+        - contact
+      summary: Find contact by ID
+      description: Returns a single contact
+      operationId: getContactById
+      parameters:
+        - name: id
+          in: path
+          description: ID of contact to return
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactResponse"
+        400:
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactResponse"
+        405:
+          description: "Invalid input"
+        401:
+          description: "Unauthorized request"
+        403:
+          description: "Forbidden request"
+      security:
+        - contacts_auth:
+            - read:contacts
+            
+    put:
+      tags:
+        - contact
+      summary: Update an existing contact
+      description: Update an existing contact by Id
+      operationId: updateContactById
+      parameters:
+        - name: id
+          in: path
+          description: Contact id to update
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      requestBody:
+        description: Update an existent contact
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateContactRequest'
+        required: true
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactResponse"
+        400:
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactResponse"
+        405:
+          description: "Invalid input"
+        401:
+          description: "Unauthorized request"
+        403:
+          description: "Forbidden request"
+      security:
+        - contacts_auth:
+            - write:contacts
+            - read:contacts
+            
+    delete:
+      tags:
+        - contact
+      summary: Deletes a contact
+      description: delete a contact
+      operationId: deleteContactbyId
+      parameters:
+        - name: id
+          in: path
+          description: Contact id to delete
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        400:
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+        405:
+          description: "Invalid input"
+        401:
+          description: "Unauthorized request"
+        403:
+          description: "Forbidden request"
+      security:
+        - contacts_auth:
+            - write:contacts
+            - read:contacts
+  /contact:
+    post:
+      tags:
+        - contact
+      summary: Add a new contact
+      description: Add a new contact
+      operationId: addContact
+      requestBody:
+        description: Create a new contact
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateContactRequest'
+        required: true
+      responses:
+        200:
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactResponse"
+        400:
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactResponse"
+        405:
+          description: "Invalid input"
+        401:
+          description: "Unauthorized request"
+        403:
+          description: "Forbidden request"
+      security:
+        - contacts_auth:
+            - write:contacts
+            - read:contacts
+            
+components:
+  schemas:
+  
+    Error:
+      type: "object"
+      additionalProperties: false
+      properties:
+        code:
+          type: "integer"
+          description: "The error code"
+        description:
+          type: "string"
+          description: "The error description"
+          
+    Contact:
+      required:
+        - firstName
+        - lastName
+        - address
+        - email
+        - mobilePhoneNumber
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+          example: henry
+        lastName:
+          type: string
+          example: pasche
+        fullname:
+          type: string
+          example: henry pasche
+        email:
+          type: string
+          example: henry.pasche@gmail.com
+        mobilePhoneNumber:
+          type: string
+          example: +41 78 652 52 52
+        address:
+          $ref: '#/components/schemas/Address'
+          
+    Address:
+      required:
+        - line1
+        - line2
+        - postalCode
+        - city
+      type: object
+      additionalProperties: false
+      properties:
+        line1:
+          type: string
+          example: Rue des vaches 15
+        line2:
+          type: string
+          example: Rue du veau 10
+        postalCode:
+          type: string
+          example: 1110
+        city:
+          type: string
+          example: Lausanne
+          
+    SkillLevel:
+      type: "string"
+      enum: [Low, Medium, High, Expert]
+      description: "The skill level"
+          
+    ContactSkill:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+        skillId:
+          type: string
+          format: uuid
+        contactId:
+          type: string
+          format: uuid
+        level:
+          $ref: '#/components/schemas/SkillLevel'
+      
+    Skill:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: Development
+          
+    CreateContactSkillRequest:
+      required:
+        - contactId
+        - skillId
+        - level
+      type: object
+      additionalProperties: false
+      properties:
+        skillId:
+          type: string
+          format: uuid
+        contactId:
+          type: string
+          format: uuid
+        level:
+          $ref: '#/components/schemas/SkillLevel'
+          
+    UpdateContactSkillRequest:
+      required:
+        - level
+      type: object
+      additionalProperties: false
+      properties:
+        level:
+          $ref: '#/components/schemas/SkillLevel'
+          
+    CreateContactRequest:
+      required:
+        - firstName
+        - lastName
+        - address
+        - email
+        - mobilePhoneNumber
+      type: object
+      additionalProperties: false
+      properties:
+        firstName:
+          type: string
+          example: henry
+        lastName:
+          type: string
+          example: pasche
+        email:
+          type: string
+          example: henry.pasche@gmail.com
+        mobilePhoneNumber:
+          type: string
+          example: +41 78 652 52 52
+        address:
+          $ref: '#/components/schemas/Address'
+          
+    UpdateContactRequest:
+      required:
+        - firstName
+        - lastName
+        - address
+        - email
+        - mobilePhoneNumber
+      type: object
+      additionalProperties: false
+      properties:
+        firstName:
+          type: string
+          example: henry
+        lastName:
+          type: string
+          example: pasche
+        email:
+          type: string
+          example: henry.pasche@gmail.com
+        mobilePhoneNumber:
+          type: string
+          example: +41 78 652 52 52
+        address:
+          $ref: '#/components/schemas/Address'
+    
+    BaseResponse:
+      type: "object"
+      additionalProperties: false
+      properties:
+        isSuccess:
+          type: "boolean"
+          description: "True if the operation was successful, false otherwise"
+        errors:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Error"
+          description: "List of errors when the operation was not successful"
+          
+    ContactResponse:
+      allOf:
+      - $ref: "#/components/schemas/BaseResponse"
+      - type: "object"
+      - additionalProperties: false
+      additionalProperties: false
+      properties:
+        contact:
+          $ref: "#/components/schemas/Contact"
+          
+    ContactSkillResponse:
+      allOf:
+      - $ref: "#/components/schemas/BaseResponse"
+      - type: "object"
+      - additionalProperties: false
+      additionalProperties: false
+      properties:
+        contactSkill:
+          $ref: "#/components/schemas/ContactSkill"
+          
+    ContactSkillsResponse:
+      allOf:
+      - $ref: "#/components/schemas/BaseResponse"
+      - type: "object"
+      - additionalProperties: false
+      additionalProperties: false
+      properties:
+        contactSkills:
+          type: array
+          items:
+            $ref: "#/components/schemas/ContactSkill"
+          
+    SkillsResponse:
+      allOf:
+      - $ref: "#/components/schemas/BaseResponse"
+      - type: "object"
+      - additionalProperties: false
+      additionalProperties: false
+      properties:
+        skills:
+          type: array
+          items:
+            $ref: "#/components/schemas/Skill"
+            
+  securitySchemes:
+    contacts_auth:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: "https://security.ch/connect/token"
+          scopes:
+            contacts: "Contacts access scope"
+            contact-skills: "Contact skills access scope"
+            skills: "Skills access scope"
